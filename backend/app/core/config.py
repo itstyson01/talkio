@@ -11,3 +11,4 @@ load_dotenv(BASE_DIR / ".env")
 
 MONGODB_URI = os.getenv("MONGODB_URI")
 DATABASE_NAME = os.getenv("DATABASE_NAME", "talkio")
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")

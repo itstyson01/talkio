@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.auth.routes import router as auth_router
 from app.database.mongodb import (
     connect_to_mongodb,
     close_mongodb_connection,
@@ -22,6 +23,9 @@ app = FastAPI(
     title="Talkio API",
     lifespan=lifespan,
 )
+
+
+app.include_router(auth_router)
 
 
 app.add_middleware(

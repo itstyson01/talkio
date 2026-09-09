@@ -1,27 +1,65 @@
-import { useEffect, useState } from "react"
+import { useContext } from "react"
 
-function App() {
-  const [message, setMessage] = useState("Connecting to Talkio backend...")
+import Login from "./pages/login"
+import { AuthProvider, AuthContext } from "./context/AuthContext"
 
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/health")
-      .then((response) => response.json())
-      .then((data) => {
-        setMessage(data.message)
-      })
-      .catch(() => {
-        setMessage("Could not connect to Talkio backend ❌")
-      })
-  }, [])
+
+function AppContent() {
+  const { user, loading, logout } = useContext(AuthContext)
+
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
+        <p className="text-gray-400">
+          Loading...
+        </p>
+      </div>
+    )
+  }
+
+
+  if (!user) {
+    return <Login />
+  }
+
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-950">
-      <h1 className="text-4xl font-bold text-white">
-        {message}
-      </h1>
+    <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
+      <div className="text-center">
+
+        <h1 className="text-3xl font-bold">
+          Welcome to Talkio 👋
+        </h1>
+
+        <p className="mt-4 text-gray-400">
+          Username: {user.username}
+        </p>
+
+        <p className="text-gray-400">
+          Email: {user.email}
+        </p>
+
+        <button
+          onClick={logout}
+          className="mt-6 bg-red-600 hover:bg-red-500 text-white font-semibold px-5 py-2 rounded-lg"
+        >
+          Logout
+        </button>
+
+      </div>
     </div>
   )
 }
 
-export default App
 
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  )
+}
+
+
+export default App
