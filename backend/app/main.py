@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.profile.routes import router as profile_router
 
 from app.auth.routes import router as auth_router
 from app.database.mongodb import (
@@ -26,6 +27,7 @@ app = FastAPI(
 
 
 app.include_router(auth_router)
+app.include_router(profile_router)
 
 
 app.add_middleware(

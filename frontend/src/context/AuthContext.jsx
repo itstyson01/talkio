@@ -1,3 +1,4 @@
+
 import { createContext, useEffect, useState } from "react"
 
 import { getCurrentUser } from "../services/api"
@@ -15,6 +16,9 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const token = getToken()
 
+    console.log("AuthContext token:", token ? "Token exists" : "No token")
+
+
     if (!token) {
       setLoading(false)
       return
@@ -23,15 +27,20 @@ export function AuthProvider({ children }) {
 
     getCurrentUser(token)
       .then((userData) => {
+        console.log("Current user:", userData)
+
         setUser(userData)
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error("Authentication failed:", error)
+
         removeToken()
         setUser(null)
       })
       .finally(() => {
         setLoading(false)
       })
+
   }, [])
 
 
@@ -45,6 +54,7 @@ export function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         user,
+        setUser,
         loading,
         logout,
       }}

@@ -36,9 +36,11 @@ async def register_user(data: RegisterRequest):
     hashed_password = hash_password(data.password)
 
     user = {
-        "username": data.username,
-        "email": data.email,
-        "password": hashed_password,
+    "username": data.username,
+    "email": data.email,
+    "password": hashed_password,
+    "bio": "",
+    "profile_picture": None,
     }
 
     result = await users_collection.insert_one(user)
@@ -93,4 +95,6 @@ async def get_me(
         "id": str(current_user["_id"]),
         "username": current_user["username"],
         "email": current_user["email"],
+        "bio": current_user.get("bio", ""),
+        "profile_picture": current_user.get("profile_picture"),
     }
